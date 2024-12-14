@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperatures</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f9fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .table-container {
+            width: 90%;
+            max-width: 1200px;
+            overflow-y: auto;
+            max-height: 500px; 
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding-top: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 12px 18px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        .cold {
+            background-color: #add8e6;
+            font-weight: bold;
+        }
+
+        .ok {
+            background-color: #90ee90;
+            font-weight: bold;
+        }
+
+        .hot {
+            background-color: #f08080;
+            font-weight: bold;
+        }
+
+        .bad {
+            background-color: #f08080;
+            font-weight: bold;
+        }
+
+     
+        .back-button {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            table {
+                width: 100%;
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Temperature Data</h1>
+    
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Temperature</th>
+                    <th>Temperature Evaluation</th>
+                    <th>Gas Resistance Levels</th>
+                    <th>Air Quality</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% rows.forEach(row => { 
+                  
+                    let tempEval = "";
+                    let tempClass = "";
+                    if (row.temperature < 40) {
+                        tempEval = "Cold";
+                        tempClass = "cold";
+                    } else if (row.temperature > 60) {
+                        tempEval = "Hot";
+                        tempClass = "hot";
+                    } else {
+                        tempEval = "Ok";
+                        tempClass = "ok";
+                    }
+
+                 
+                    let airQuality = "";
+                    let airClass = "";
+                    if (row.gasResistence < 500000) {
+                        airQuality = "Bad";
+                        airClass = "bad";
+                    } else {
+                        airQuality = "Ok";
+                        airClass = "ok";
+                    }
+                %>
+                    <tr>
+                        <td><%= new Date(row.dateTime).toLocaleString('en-US', { 
+                            weekday: 'short', 
+                            year: 'numeric', 
+                            month: 'short', 
+                            day: 'numeric', 
+                            hour: 'numeric', 
+                            minute: 'numeric', 
+                            second: 'numeric' 
+                        }) %></td>
+                        <td><%= (row.temperature)-25 %></td>  <!-- we substract 25 (sensor error) to make it more user friendly -->
+                        <td class="<%= tempClass %>"><%= tempEval %></td>
+                        <td><%= row.gasResistence %></td>
+                        <td class="<%= airClass %>"><%= airQuality %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+  
+    <a href="/room1" class="back-button">Back to Room</a>
+</body>
+</html>

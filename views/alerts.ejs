@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Alerts</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 30px 0;
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .alerts-container {
+            max-width: 800px;
+            margin: 0 auto;
+            margin-top: 100px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .alerts-header {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .alerts-scrollable {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f7f9fc;
+            border-radius: 5px;
+        }
+
+        .alert-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+
+        .alert-item p {
+            margin: 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .alert-item strong {
+            color: #2c3e50;
+        }
+
+        .buttons-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            margin: 10px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .alert-summary {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 8px;
+            padding: 10px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1rem;
+            text-align: right;
+        }
+
+        .alert-summary h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .alert-summary p {
+            margin: 5px 0;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+   
+    <div class="alert-summary">
+        <h3>Alerts Summary</h3>
+        <p><strong>Total:</strong> <%= totalAlerts %></p>
+        <p><strong>New Today:</strong> <%= newAlerts %></p>
+    </div>
+
+    
+    <div class="alerts-container">
+        <div class="alerts-header">
+            <h2>Alerts History</h2>
+        </div>
+        <div class="alerts-scrollable">
+            <% if (rows && rows.length > 0) { %>
+                <% rows.forEach((alert) => { %>
+                    <div class="alert-item">
+                        <p><strong>Description:</strong> <%= alert.Description || 'No description available' %></p>
+                        <p><strong>Date:</strong> <%= new Date(alert.dateTime).toLocaleDateString() %></p>
+                        <p><strong>Time:</strong> <%= new Date(alert.dateTime).toLocaleTimeString() %></p>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>No alerts available</p>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="buttons-container">
+        <button onclick="window.location.href='/room1'">Back to Room</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= roomName %></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+            max-width: 1000px;
+            width: 90%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 10px 0;
+        }
+
+        .grid-item {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        .heater-status {
+            font-size: 1.2rem;
+            background-color: #f7f7f7;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #555;
+            display: inline-block;
+            margin-top: 10px;
+            width: 90%;
+        }
+
+        .heater-status.on {
+            background-color: #afd2f8f0;
+            color: #555;
+        }
+
+        .heater-status.off {
+            background-color: #f7f7f7;
+            color: #555;
+        }
+
+        .buttons-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .left-buttons,
+        .right-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007BFF;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-red {
+            background-color: #dc3545;
+        }
+
+        .btn-red:hover {
+            background-color: #a71d2a;
+        }
+
+        .top-right {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .top-right button {
+            background-color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><%= roomName %></h1>
+        
+        <div class="top-right">
+            <button onclick="window.location.href='/'">Select other rooms</button>
+        </div>
+
+        <div class="grid-container">
+            <% if (heaters && heaters.length > 0) { %>
+                <% heaters.forEach((heater) => { %>
+                    <div class="grid-item">
+                        <h2><%= heater.name %></h2>
+                        <div>
+                            <span class="heater-status <%= heater.status ? 'on' : 'off' %>">
+                                <%= heater.status ? 'ON' : 'OFF' %>
+                            </span>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="grid-item">
+                    <h2>No heaters found</h2>
+                </div>
+            <% } %>
+
+            <div class="grid-item">
+                <h2>Temperature IN</h2>
+                <div class="heater-status">
+                    <%= tempData ? (tempData.temperature)-25 + ' °C' : 'Loading...' %> <!-- we substract 25 (sensor error) to make it more user friendly -->
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <h2>Temperature OUT</h2>
+                <div class="heater-status">
+                    <%= tempOut ? tempOut.temp + ' °C' : 'Loading...' %>
+                </div>
+            </div>
+
+            <div class="grid-item">
+                <h2>Latest Alert</h2>
+                <div class="heater-status">
+                    <% if (alerts && alerts.length > 0) { %>
+                        <p><%= alerts[0].Description || 'No description available' %></p>
+                    <% } else { %>
+                        <p>No alerts available</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <div class="left-buttons">
+                <button onclick="window.location.href='/getTempData'">Get Temperature</button>
+                <button onclick="window.location.href='/getGraphs'">Get Graphs</button>
+                <button onclick="window.location.href='/getAlerts'">Get All Alerts</button>
+            </div>
+            <div class="right-buttons">
+                <form action="/emergencyStop" method="POST" style="display:inline;">
+                    <button type="submit" class="btn-red">Stop</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
